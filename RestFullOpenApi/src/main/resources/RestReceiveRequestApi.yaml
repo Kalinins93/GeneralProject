@@ -1,0 +1,105 @@
+openapi: 3.0.0
+info:
+  description: "Rest API первый микросервис - принималка заявок."
+  version: "1.0.0"
+  title: "RestReceiveRequest"
+  contact:
+    email: "ilkalinin@neoflex.ru"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+tags:
+  - name: "RestReceiveRequest"
+    description: "Прием заявок на кредит"
+paths:
+  /requests:
+    description: "Прием заявок на кредит"
+    post:
+      tags:
+        - "rest-receive-request"
+      summary: "Сообщение-запрос прием заявок на кредит"
+      operationId: "RestReceiveRequest"
+      requestBody:
+        description: "Запрос RestReceiveRequest"
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestReceiveRequest'
+      responses:
+        '200':
+          description: "Успешный ответ о принятие сообщения"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestResponse"
+        '400':
+          description: "код ошибки конечной системы + описание ошибки из конечной системы/Формат запроса не соответствует описанию. Не заполнено обязательное поле"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestResponse"
+        '408':
+          description: "Превышен интервал времени ожидания ответа от конечной системы"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestResponse"
+        '415':
+          description: "Ошибка преобразования"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestResponse"
+        '500':
+          description: "Внутренняя ошибка сервера"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestResponse"
+        '503':
+          description: "Ошибка вызова сервиса конечной системы"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestResponse"
+components:
+  schemas:
+    RestReceiveRequest:
+      type: "object"
+      description: "Заявка на кредит"
+      properties:
+        id:
+         type: "integer"
+         description: "Уникальный ID заявки"
+        fio:
+          type: "string"
+          description: "ФИО клиентп"
+        birthday:
+          type: "string"
+          description: "Дата рождения"
+        summa:
+          type: "integer"
+          description: "Сумма кредита"
+        count_month:
+          type: "integer"
+          description: "Количество месяцев"
+    RestResponse:
+      type: "object"
+      description: "Заявка на кредит"
+      properties:
+        id:
+          type: "integer"
+          description: "Уникальный ID заявки"
+        status:
+          $ref: '#/components/schemas/StatusMessage'
+          description: "Статус операции"
+    StatusMessage:
+        type: "object"
+        properties:
+          code:
+            description: 'Код ошибки (либо 0)'
+            type: "string"
+          text:
+            description: 'Текст ошибки'
+            type: "string"

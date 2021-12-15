@@ -1,0 +1,14 @@
+spring.jpa.hibernate.ddl-auto: update
+spring.jpa.hibernate.show_sql: true
+spring.datasource:
+     url: 'jdbc:postgresql://localhost:5432/postgres'
+     username: postgres
+     password: momS51tsmu
+     driver-class-oracle:
+      jdbc:
+       driver: org.postgresql.Driver
+kafka:
+  bootstrapAddress: "localhost:29092"
+  topic: "requests"
+credit:
+  limit: "50000000"

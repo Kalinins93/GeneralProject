@@ -1,0 +1,12 @@
+server.port: 8081
+logging:
+  level:
+    reactor:
+      netty:
+        http:
+          client: DEBUG
+
+kafka:
+  bootstrapAddress: "localhost:29092"
+  topic: "requests"
+  retries: "3"
