@@ -2,3 +2,5 @@ rootProject.name = 'GeneralProject'
 include 'RestFullOpenApi'
 include 'WebRestFullToKafka'
 include 'KafkaToPostreSql'
+include 'FindCreditIdUploadPDF'
+

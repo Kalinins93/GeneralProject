@@ -1,10 +1,10 @@
-package ru.neoflex.kafkatopostgresql.services;
+package ru.neoflex.findcreditiduploadpdf.services;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.neoflex.kafkatopostgresql.dao.ProcessedRequestsDao;
-import ru.neoflex.kafkatopostgresql.model.ProcessedRequests;
+import ru.neoflex.findcreditiduploadpdf.dao.ProcessedRequestsDao;
+import ru.neoflex.findcreditiduploadpdf.model.ProcessedRequests;
 
 import java.util.List;
 
