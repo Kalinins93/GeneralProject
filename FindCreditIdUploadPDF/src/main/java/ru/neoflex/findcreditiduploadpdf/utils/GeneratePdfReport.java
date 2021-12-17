@@ -1,92 +1,94 @@
 package ru.neoflex.findcreditiduploadpdf.utils;
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
+import com.itextpdf.io.exceptions.ExceptionUtil;
+import com.itextpdf.io.font.PdfEncodings;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.properties.HorizontalAlignment;
+import com.itextpdf.layout.properties.VerticalAlignment;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.neoflex.findcreditiduploadpdf.model.ProcessedRequests;
+import java.awt.*;
+import java.io.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import static java.awt.font.TextAttribute.FONT;
+
 
 public class GeneratePdfReport {
 
     private static final Logger logger = LoggerFactory.getLogger(GeneratePdfReport.class);
-    private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
-            Font.BOLD);
+    public static final String FONT = "./src/main/resources/helvetica_pandoge_com/HelveticaRegular/HelveticaRegular.ttf";
 
-    public static ByteArrayInputStream citiesReport(ProcessedRequests credit) {
-
-        Document document = new Document();
+    //private static Font paragraphFont = new Font("resources/helvetica_pandoge_com/HelveticaRegular/HelveticaRegular.ttf",12,12);
+    public static ByteArrayInputStream pdfReports(ProcessedRequests credit) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-
         try {
+
+            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(out));
+            Document doc = new Document(pdfDoc);
+            PdfFont f = PdfFontFactory.createFont(FONT, PdfEncodings.IDENTITY_H);
             Paragraph preface = new Paragraph();
             addEmptyLine(preface, 1);
-            preface.add(new Paragraph("Credit agreement", catFont));
+            preface.add(new Paragraph(new Text("Кредитный договор").setFont(f)));
             addEmptyLine(preface, 1);
 
-            PdfPTable table = new PdfPTable(4);
-            table.setWidthPercentage(60);
-            table.setWidths(new int[]{1, 3, 3, 4});
 
-            Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+            Table table = new Table(5).useAllAvailableWidth();
+            Cell colid = new Cell().add(new Paragraph("Ид заявки").setFont(f));
+            table.addCell(colid);
+            Cell colname = new Cell().add(new Paragraph("ФИО").setFont(f));
+            table.addCell(colname);
+            Cell colbithday = new Cell().add(new Paragraph("Год рождения").setFont(f));
+            table.addCell(colbithday);
+            Cell colage = new Cell().add(new Paragraph("Сумма").setFont(f));
+            table.addCell(colage);
+            Cell colsurname = new Cell().add(new Paragraph("Количество месяцев").setFont(f));
+            table.addCell(colsurname);
 
-            PdfPCell hcell;
-            hcell = new PdfPCell(new Phrase("Id", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            Cell id = new Cell().add(new Paragraph(credit.getId().toString()).setFont(f))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setHorizontalAlignment(HorizontalAlignment.CENTER);
+            table.addCell(id);
 
-            hcell = new PdfPCell(new Phrase("FIO", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            Cell fio = new Cell().add(new Paragraph(credit.getFio()).setFont(f))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setHorizontalAlignment(HorizontalAlignment.CENTER);
+            table.addCell(fio);
 
-            hcell = new PdfPCell(new Phrase("Summa", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            Cell birthday = new Cell().add(new Paragraph(credit.getBirthday()).setFont(f))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setHorizontalAlignment(HorizontalAlignment.CENTER);
+            table.addCell(birthday);
 
-            hcell = new PdfPCell(new Phrase("CountMonth", headFont));
-            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(hcell);
+            Cell summa = new Cell().add(new Paragraph(credit.getSumma().toString()).setFont(f))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setHorizontalAlignment(HorizontalAlignment.CENTER);
+            table.addCell(summa);
 
-            PdfPCell cell;
+            Cell countMonth = new Cell().add(new Paragraph(credit.getCountMonth().toString()).setFont(f))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setHorizontalAlignment(HorizontalAlignment.CENTER);
+            table.addCell(countMonth);
 
+            doc.add(preface);
+            doc.add(table);
+            pdfDoc.close();
 
-            cell = new PdfPCell(new Phrase(credit.getId().toString()));
-            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase(credit.getFio()));
-            cell.setPaddingLeft(5);
-            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase(String.valueOf(credit.getSumma())));
-            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            cell.setPaddingRight(5);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase(String.valueOf(credit.getCountMonth())));
-            cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            cell.setPaddingRight(5);
-            table.addCell(cell);
-
-            PdfWriter.getInstance(document, out);
-            document.open();
-            document.add(preface);
-            document.add(table);
-
-            document.close();
-
-        } catch (DocumentException ex) {
+        } catch (Exception ex) {
 
             logger.error("Error occurred: {0}", ex);
         }
-
         return new ByteArrayInputStream(out.toByteArray());
     }
     private static void addEmptyLine(Paragraph paragraph, int number) {

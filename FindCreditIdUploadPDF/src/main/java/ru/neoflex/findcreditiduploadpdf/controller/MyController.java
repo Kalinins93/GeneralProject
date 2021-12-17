@@ -38,7 +38,7 @@ public class MyController {
             ProcessedRequests credit = processedRequests.findProcessedRequestsByID((int) requestId);
             logger.info(credit.toString());
             if (credit != null && "ОДОБРЕН".contains(credit.getStatus())) {
-                ByteArrayInputStream bis = GeneratePdfReport.citiesReport(credit);
+                ByteArrayInputStream bis = GeneratePdfReport.pdfReports(credit);
 
                 var headers = new HttpHeaders();
                 headers.add("Content-Disposition", "inline; filename=creditreport.pdf");
