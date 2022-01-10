@@ -11,7 +11,6 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import ru.neoflex.kafkastream.model.RestReceiveRequest;
-import ru.neoflex.webrestfulltokafka.kafka.KafkaMessagePublisher;
 
 import java.util.HashMap;
 import java.util.Map;
