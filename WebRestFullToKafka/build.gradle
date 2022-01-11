@@ -12,12 +12,16 @@ mainClassName = 'ru.neoflex.webrestfulltokafka.WebRestFullToKafkaApplication'
 repositories {
     mavenCentral()
 }
-bootJar {
-    enabled = false
-}
 
 jar {
     enabled = true
+}
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'ru.neoflex.webrestfulltokafka.WebRestFullToKafkaApplication'
+        )
+    }
 }
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux:2.5.6'

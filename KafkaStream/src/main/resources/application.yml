@@ -1,0 +1,11 @@
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:29092
+      #      group-id: ""
+      #      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonSerializer
+      application-id: PeopleAnalyzer
+      input-topic: requests
+      output-topic: requests_from_young_people
